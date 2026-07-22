@@ -10,7 +10,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL")
     DATABASE_URL_ASYNC: str = os.getenv("DATABASE_URL_ASYNC")
 
-    # Redis
+    # Redis — set REDIS_URL for managed providers (Upstash, etc.) that require
+    # a password/TLS (rediss://); falls back to host/port/db for local dev.
+    REDIS_URL: str = os.getenv("REDIS_URL", "")
     REDIS_HOST: str = os.getenv('REDIS_HOST', 'localhost')
     REDIS_PORT: int = int(os.getenv('REDIS_PORT', 6379))
     REDIS_DB: int = int(os.getenv('REDIS_DB', 0))
