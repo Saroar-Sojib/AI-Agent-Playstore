@@ -1,26 +1,3 @@
-"""Gemini LLM client — plain REST over ``httpx`` (no ``google-genai`` SDK).
-
-Talks directly to Gemini's ``generateContent`` REST endpoint:
-
-    POST {LLM_API_URL}/{LLM_MODEL}:generateContent?key={LLM_API_KEY}
-
-Request shape::
-
-    {
-      "system_instruction": {"parts": [{"text": "<system prompt>"}]},
-      "contents": [
-        {"role": "user", "parts": [{"text": "..."}]},
-        {"role": "model", "parts": [{"text": "..."}]},
-        ...
-        {"role": "user", "parts": [{"text": "<latest user message>"}]}
-      ]
-    }
-
-Gemini uses roles "user" and "model" (not "assistant") — ``ChatMessage.role
-== "assistant"`` is translated to "model" when building history, and any
-"system" rows are skipped (system content belongs in ``system_instruction``,
-not ``contents``).
-"""
 from __future__ import annotations
 
 import logging
@@ -72,12 +49,6 @@ def _build_contents(history: list[dict], user_message: str) -> list[dict]:
 async def generate_reply(
     system_prompt: str, history: list[dict], user_message: str
 ) -> tuple[str, dict]:
-    """Call Gemini's ``generateContent`` and return ``(reply_text, metrics)``.
-
-    ``metrics`` is ``{"latency_ms": int, "tokens_used": int | None}``.
-    Raises ``LLMError`` on any failure — never lets a raw ``httpx`` exception
-    (timeout, connection error, ...) or a malformed response escape.
-    """
     url = f"{settings.LLM_API_URL}/{settings.LLM_MODEL}:generateContent"
     params = {"key": settings.LLM_API_KEY}
     payload: dict[str, Any] = {

@@ -8,11 +8,4 @@ redis_url = settings.REDIS_URL or (
 
 
 def create_redis_client() -> redis_asyncio.Redis:
-    """One client per process, attached to ``app.state.redis`` at startup.
-
-    Every caller (``rate_limit.py``, ``token_denylist.py``) already treats a
-    missing/unreachable client as "fail open" — this factory doesn't need to
-    guard against connection errors itself, just needs to exist and be
-    reachable eventually for those features to actually take effect.
-    """
     return redis_asyncio.from_url(redis_url)

@@ -45,8 +45,6 @@ router = APIRouter()
 
 
 def _cookie_secure() -> bool:
-    """``Secure`` is required by browsers for cross-site cookies and any
-    SameSite=None usage. We only relax it in DEBUG to allow plain-http dev."""
     return not settings.DEBUG
 
 
@@ -77,12 +75,6 @@ def _clear_refresh_cookie(response: Response) -> None:
 
 
 async def _resolve_agent_id(agent_slug: str, db: AsyncSession) -> int:
-    """Resolve the agent named in a signup/login request body.
-
-    Signup and login carry ``agent_slug`` in the body (there's no subdomain
-    or header-based resolution in AgentHub) — fails closed with 404 if the
-    slug doesn't match a known agent.
-    """
     agent = await AgentRepository(db).get_by_slug(agent_slug)
     if agent is None:
         raise HTTPException(
@@ -92,12 +84,6 @@ async def _resolve_agent_id(agent_slug: str, db: AsyncSession) -> int:
 
 
 def _issue_token_response(user: User, status_code: int = 200) -> JSONResponse:
-    """Build the JSON access-token response and attach the refresh cookie.
-
-    Returning a ``JSONResponse`` directly bypasses the route decorator's
-    ``status_code`` (that only applies when the handler returns plain data),
-    so callers that need a non-200 (e.g. signup's 201) must pass it explicitly.
-    """
     access_token, expires_in = create_access_token(
         uid=user.id,
         email=user.email,
@@ -156,11 +142,6 @@ async def login(
     payload: LoginRequest,
     db: AsyncSession = Depends(get_db),
 ):
-    """Email + password login, scoped to exactly one agent.
-
-    A user provisioned under agent A cannot log in by naming agent B — the
-    lookup is ``(email, agent_id)``, not ``email`` alone.
-    """
     agent_id = await _resolve_agent_id(payload.agent_slug, db)
 
     user = await UserRepository(db).get_by_email(payload.email, agent_id=agent_id)

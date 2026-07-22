@@ -1,20 +1,3 @@
-"""Redis-backed token revocation.
-
-Two revocation mechanisms, both keyed off claims that every backend-issued
-token carries (``jti`` + ``iat`` + ``uid``):
-
-1. Single-token denylist — ``revoke_token`` writes ``auth:revoked:{jti}`` with a
-   TTL equal to the token's remaining lifetime, so the entry self-expires once
-   the token would have expired anyway. Used on logout / refresh rotation.
-
-2. Per-user cutoff — ``revoke_all_for_user`` writes ``auth:min_iat:{uid}`` =
-   now. Any token whose ``iat`` is older than that is rejected. Used for
-   "logout everywhere" and to invalidate every session on password change.
-
-Fail-open: if Redis is unavailable, checks return ``False`` (not revoked) —
-matching the rest of the codebase, which treats Redis as a best-effort cache.
-Without Redis, revocation simply isn't enforced (tokens still expire normally).
-"""
 from __future__ import annotations
 
 import time

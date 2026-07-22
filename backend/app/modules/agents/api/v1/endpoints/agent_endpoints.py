@@ -18,7 +18,6 @@ async def list_agents(
     page_size: int = 50,
     service: AgentService = Depends(get_agent_service),
 ):
-    """Public catalog listing — every agent persona a user can sign up for."""
     return await service.list_agents(page, page_size)
 
 
@@ -27,5 +26,4 @@ async def get_agent(
     slug: str,
     service: AgentService = Depends(get_agent_service),
 ):
-    """Public catalog detail for a single agent persona."""
     return await service.get_by_slug(slug)

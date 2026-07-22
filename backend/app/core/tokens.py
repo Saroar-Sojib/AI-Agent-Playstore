@@ -1,22 +1,3 @@
-"""Native JWT issuance and verification.
-
-The backend is its own identity provider: it signs short-lived **access**
-tokens and longer-lived **refresh** tokens with HS256 using
-``settings.JWT_SECRET_KEY``. There is no external OIDC provider.
-
-Token shape (access):
-    {
-      "sub":      "42",                 # stable subject: local res_users.id as string
-      "uid":      42,                    # local res_users.id
-      "email":    "user@example.com",
-      "agent_id": "7" | null,            # local agents.id as string
-      "type":     "access",
-      "iat": ..., "exp": ...
-    }
-
-Refresh tokens carry the same identity claims plus ``"type": "refresh"`` and a
-random ``jti`` so they can be denylisted later if needed.
-"""
 from __future__ import annotations
 
 import secrets

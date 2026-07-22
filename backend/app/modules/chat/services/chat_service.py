@@ -16,8 +16,6 @@ logger = logging.getLogger(__name__)
 
 
 def _default_system_prompt(agent: Agent, sub_agent: Optional[SubAgent]) -> str:
-    """Generic fallback used until the (future) content-pipeline script has
-    populated real ``system_prompt`` values on ``Agent``/``SubAgent``."""
     if sub_agent is not None:
         base = f"You are the {sub_agent.name}, a specialized AI assistant for {agent.profession}."
         if sub_agent.task_description:
@@ -50,12 +48,6 @@ class ChatService:
         conversation_id: Optional[int],
         user_message: str,
     ) -> tuple[int, str]:
-        """Send one chat turn; returns ``(conversation_id, reply_text)``.
-
-        Persists the user message and (on success) the assistant reply, and
-        always writes a ``UsageLog`` row (success or error) for cost/abuse
-        tracking, before returning the reply or raising a clean HTTP error.
-        """
         sub_agent_id = sub_agent.id if sub_agent is not None else None
 
         conversation = None

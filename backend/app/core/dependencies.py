@@ -13,12 +13,6 @@ from app.modules.users.models.user import User
 async def set_user_context(
     user_id: int | None = Depends(get_current_user_id),
 ):
-    """App-wide dependency: make sure ``current_user_id`` is populated.
-
-    Usually a no-op — ``AgentMiddleware`` already set it from the bearer
-    token before any route dependency runs. Kept as a light safety net for
-    request paths the middleware might not cover.
-    """
     if user_id is not None:
         current_user_id.set(user_id)
 
@@ -28,13 +22,6 @@ async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: AsyncSession = Depends(get_db),
 ) -> User:
-    """Require an authenticated, active user. Returns the loaded ``User`` row.
-
-    Use this in place of the deleted ``require_permission(...)`` — AgentHub
-    has no fine-grained permissions, just "does this user belong to this
-    agent". Endpoints that need agent-scoped access should compare
-    ``user.agent_id`` against the resource being acted on.
-    """
     if not credentials:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"

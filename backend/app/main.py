@@ -49,22 +49,11 @@ register_exception_handlers(app)
 
 @app.on_event("startup")
 async def _connect_redis() -> None:
-    """Attach a real Redis client to ``app.state.redis``.
-
-    ``rate_limit.py``/``token_denylist.py`` read ``request.app.state.redis``
-    and treat a missing attribute as "Redis unavailable, fail open" — without
-    this, rate limiting and token revocation silently never activate even
-    though they're wired into every sensitive endpoint. The client connects
-    lazily (no command sent yet), so a Redis outage at boot doesn't crash
-    startup — it just keeps failing open until Redis comes back.
-    """
     app.state.redis = create_redis_client()
 
 
 @app.on_event("shutdown")
 async def _dispose_engine() -> None:
-    """Gracefully close pooled connections before the process exits
-    (also runs on TestClient's lifespan shutdown between test runs)."""
     await engine.dispose()
     redis_client = getattr(app.state, "redis", None)
     if redis_client is not None:

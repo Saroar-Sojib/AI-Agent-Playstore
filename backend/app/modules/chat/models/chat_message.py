@@ -5,8 +5,6 @@ from app.infrastructure.mixins import CreatedAtMixin
 
 
 class ChatMessage(Base, CreatedAtMixin):
-    """One turn of a ``Conversation`` — either the user's message or the
-    assistant's reply (role: "user" / "assistant" / "system")."""
 
     __tablename__ = "chat_messages"
 

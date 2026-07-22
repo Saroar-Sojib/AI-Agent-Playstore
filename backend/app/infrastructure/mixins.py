@@ -20,21 +20,10 @@ class TimestampMixin:
 
 
 class CreatedAtMixin:
-    """Just ``created_at`` — for tables with no update/audit trail (seeded
-    catalog rows, append-only logs/messages). Use ``TimestampMixin`` instead
-    when a table is mutated by an authenticated user and needs the full
-    created/updated-by audit trail."""
-
     created_at = Column(DateTime(timezone=True), default=_utcnow, nullable=False)
 
 
 class SoftDeleteMixin:
-    """Universal soft-delete + activation flag.
-
-    ``is_active=false`` means revoked / disabled but kept on file.
-    ``deleted_at`` set means soft-deleted (filtered out by default queries).
-    """
-
     is_active = Column(Boolean, default=True, nullable=False)
     deleted_at = Column(DateTime(timezone=True), nullable=True, index=True)
 

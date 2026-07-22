@@ -5,12 +5,6 @@ from app.infrastructure.mixins import _utcnow
 
 
 class UsageLog(Base):
-    """One row per LLM call — cost/usage tracking and abuse monitoring.
-
-    Written for both success and error outcomes (``status``), independent of
-    whether a ``ChatMessage`` pair was persisted, so failed calls are still
-    visible in usage metrics.
-    """
 
     __tablename__ = "usage_logs"
 

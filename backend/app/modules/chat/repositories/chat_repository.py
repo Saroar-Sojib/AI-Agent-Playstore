@@ -36,8 +36,6 @@ class ChatRepository:
     async def get_conversation(
         self, conversation_id: int, user_id: int, agent_id: int, sub_agent_id: Optional[int]
     ) -> Optional[Conversation]:
-        """Fetch a conversation, verifying it belongs to this exact
-        user + agent + sub_agent combo (isolation check)."""
         result = await self.db.execute(
             select(Conversation).where(
                 Conversation.id == conversation_id,

@@ -36,14 +36,6 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
             agent_id = current_agent_id.get()
 
-            # Bind a session-scoped GUC (third arg = false) so it survives
-            # commit/begin cycles within the request. Transaction-scoped
-            # (SET LOCAL) GUCs are wiped on commit, which then breaks any
-            # SELECT/refresh issued after a commit (RLS filters the row out,
-            # if/when an agent-scoped RLS policy is added later). Cleanup in
-            # the finally block resets it before the connection returns to
-            # the pool — otherwise a recycled connection would leak agent
-            # context into the next request.
             if agent_id:
                 await session.execute(
                     text("SELECT set_config('app.agent_id', :aid, false)"),
