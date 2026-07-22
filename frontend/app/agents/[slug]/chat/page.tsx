@@ -33,6 +33,9 @@ export default function ChatPage({
       router.replace(`/agents/${slug}`);
       return;
     }
+    // getToken reads localStorage (client-only); setting it during render
+    // would mismatch the server-rendered HTML, so this must run post-mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTokenState(existing);
   }, [slug, router]);
 
