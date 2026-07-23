@@ -2,11 +2,24 @@ import type { AgentListResponse } from "@/lib/api";
 import { serverFetch } from "@/lib/server-api";
 import CatalogBrowser from "@/components/CatalogBrowser";
 import SiteHeader from "@/components/SiteHeader";
+import BackendWakingUp from "@/components/BackendWakingUp";
 
 export default async function HomePage() {
-  const list = await serverFetch<AgentListResponse>(
-    "/v1/agents/?page=1&page_size=100"
-  );
+  let list: AgentListResponse | null;
+  try {
+    list = await serverFetch<AgentListResponse>(
+      "/v1/agents/?page=1&page_size=100"
+    );
+  } catch {
+    // Free-tier backend was asleep and didn't respond in time — show a
+    // friendly wait screen instead of crashing the page.
+    return (
+      <div className="flex min-h-full flex-1 flex-col">
+        <SiteHeader />
+        <BackendWakingUp />
+      </div>
+    );
+  }
   const agents = list?.data ?? [];
 
   return (
