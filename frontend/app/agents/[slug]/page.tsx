@@ -3,7 +3,6 @@ import type { Agent } from "@/lib/api";
 import { serverFetch } from "@/lib/server-api";
 import AuthPanel from "@/components/AuthPanel";
 import SiteHeader from "@/components/SiteHeader";
-import { colorFor } from "@/lib/badge-colors";
 
 export default async function AgentPage({
   params,
@@ -15,7 +14,6 @@ export default async function AgentPage({
   if (!agent) notFound();
 
   const label = agent.industry ?? "General";
-  const color = colorFor(label);
   const initial = (agent.profession ?? agent.slug).charAt(0).toUpperCase();
 
   return (
@@ -24,14 +22,10 @@ export default async function AgentPage({
 
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-8 px-4 py-10 sm:px-6">
         <header className="flex flex-col items-center gap-3 text-center">
-          <span
-            className={`flex h-14 w-14 items-center justify-center rounded-2xl text-xl font-bold ${color.bg} ${color.fg}`}
-          >
+          <span className="brand-gradient-bg flex h-14 w-14 items-center justify-center rounded-2xl text-xl font-bold text-white">
             {initial}
           </span>
-          <span
-            className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${color.bg} ${color.fg}`}
-          >
+          <span className="rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-neutral-600 dark:bg-white/10 dark:text-neutral-300">
             {label}
           </span>
           <h1 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">

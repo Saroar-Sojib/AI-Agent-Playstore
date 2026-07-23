@@ -7,7 +7,6 @@ import { clearToken, getToken, setToken } from "@/lib/auth-storage";
 import ChatWindow, { type DisplayMessage } from "@/components/ChatWindow";
 import SubAgentSwitcher from "@/components/SubAgentSwitcher";
 import SiteHeader from "@/components/SiteHeader";
-import { colorFor } from "@/lib/badge-colors";
 
 export default function ChatPage({
   params,
@@ -134,7 +133,6 @@ export default function ChatPage({
   if (!token) return null; // redirecting
 
   const label = agent?.industry ?? "…";
-  const color = colorFor(label);
   const initial = (agent?.profession ?? slug).charAt(0).toUpperCase();
 
   return (
@@ -152,9 +150,7 @@ export default function ChatPage({
 
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3 border-b border-[var(--border-subtle)] pb-4">
-          <span
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold ${color.bg} ${color.fg}`}
-          >
+          <span className="brand-gradient-bg flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white">
             {initial}
           </span>
           <div>
