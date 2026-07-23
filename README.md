@@ -18,6 +18,31 @@ sub-agents) — every reply powered by a real LLM (Gemini).
 > automatically, no need to refresh manually. Once it's awake, everything runs
 > at normal speed until it goes idle again.
 
+## Test accounts
+
+Login is **scoped per agent** — an account created for one agent doesn't work
+for another (this is enforced server-side, verified with automated tests in
+[backend/app/tests](backend/app/tests)). Below are 5 pre-created test
+accounts, one per agent, covering the professions the assignment calls out by
+name. All 5 are fully working (real Gemini replies) and each exposes 4
+specialized sub-agents.
+
+| Agent | URL | Email | Password |
+|---|---|---|---|
+| Doctor / Physician | [/agents/doctor-physician](https://agent-hub-frontend-frkh.onrender.com/agents/doctor-physician) | `agenthub.doctor-physician@gmail.com` | `ReviewMe#2026` |
+| Corporate Lawyer | [/agents/corporate-lawyer](https://agent-hub-frontend-frkh.onrender.com/agents/corporate-lawyer) | `agenthub.corporate-lawyer@gmail.com` | `ReviewMe#2026` |
+| Financial Controller | [/agents/financial-controller](https://agent-hub-frontend-frkh.onrender.com/agents/financial-controller) | `agenthub.financial-controller@gmail.com` | `ReviewMe#2026` |
+| Software Developer | [/agents/software-developer](https://agent-hub-frontend-frkh.onrender.com/agents/software-developer) | `agenthub.software-developer@gmail.com` | `ReviewMe#2026` |
+| Teacher | [/agents/teacher](https://agent-hub-frontend-frkh.onrender.com/agents/teacher) | `agenthub.teacher@gmail.com` | `ReviewMe#2026` |
+
+Each of these accounts only logs in on its own agent's URL — trying the same
+email/password combo under a different agent's `/agents/<slug>` page fails.
+
+Prefer to test signup yourself instead of using the accounts above? Any of the
+other ~95 agents in the catalog work the same way: pick one from the homepage,
+click it, and use the **Sign up** tab with any email/password — no invite or
+approval needed.
+
 ## What it does
 
 - Browse a catalog of AI agents, each one a distinct profession persona
@@ -42,6 +67,12 @@ sub-agents) — every reply powered by a real LLM (Gemini).
 | **LLM** | Gemini `generateContent` REST API (direct `httpx` call, no SDK) |
 | **CI** | GitHub Actions (separate pipelines for `frontend/` and `backend/`) |
 | **Hosting** | Render (both services), Upstash (Redis) |
+
+## AI-assisted development disclosure
+
+This project was built with **Claude Code** (Anthropic's CLI agent) as the
+primary coding tool — see [backend/README.md](backend/README.md#ai-assisted-development-disclosure)
+for the full disclosure of what it was used for.
 
 ## Repo structure
 
