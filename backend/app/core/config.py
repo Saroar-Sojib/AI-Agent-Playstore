@@ -1,5 +1,6 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
-from typing import List
+from typing import List, Union
 import os
 
 from dotenv import load_dotenv
@@ -38,10 +39,19 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = os.getenv("PROJECT_NAME", "HRIS")
     DEBUG: bool = os.getenv("DEBUG", "False").lower() in ("true", "1")
 
-    # CORS
-    BACKEND_CORS_ORIGINS: List[str] = os.getenv(
+    # CORS — plain "a,b,c" string, not JSON: pydantic-settings tries to
+    # JSON-decode env vars typed as List[str], so the field is typed
+    # Union[str, List[str]] and this validator does the comma-split instead.
+    BACKEND_CORS_ORIGINS: Union[str, List[str]] = os.getenv(
         "BACKEND_CORS_ORIGINS", "http://localhost:3000"
-    ).split(",")
+    )
+
+    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @classmethod
+    def _split_cors_origins(cls, v):
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
 
     # LLM (Gemini, called directly over REST via httpx — see
     # app/modules/chat/services/llm_client.py)
