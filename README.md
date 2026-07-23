@@ -10,6 +10,7 @@ sub-agents) — every reply powered by a real LLM (Gemini).
 |---|---|
 | **Frontend** | [agent-hub-frontend-frkh.onrender.com](https://agent-hub-frontend-frkh.onrender.com) |
 | **Backend API** | [agent-hub-backend-7vtg.onrender.com](https://agent-hub-backend-7vtg.onrender.com) |
+| **API docs (Swagger)** | [agent-hub-backend-7vtg.onrender.com/docs](https://agent-hub-backend-7vtg.onrender.com/docs) |
 
 > ⏳ **Heads up — first load takes ~30–60 seconds.**
 > This is hosted on **free-tier** infrastructure, which puts services to sleep
