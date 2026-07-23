@@ -26,6 +26,13 @@ export default function ChatPage({
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Each target (main agent or a specific sub-agent) has its own
+  // conversation — keep them separate so switching back and forth within
+  // the same session doesn't lose what was already said to the other one.
+  const [threads, setThreads] = useState<
+    Record<string, { conversationId?: number; messages: DisplayMessage[] }>
+  >({});
+
   // Auth guard — this page requires a token scoped to THIS agent specifically.
   useEffect(() => {
     const existing = getToken(slug);
@@ -62,10 +69,19 @@ export default function ChatPage({
     };
   }, [slug, token]);
 
+  function targetKey(subAgent: SubAgent | null): string {
+    return subAgent ? `sub-${subAgent.id}` : "main";
+  }
+
   function switchTarget(subAgent: SubAgent | null) {
+    const currentKey = targetKey(selected);
+    const nextKey = targetKey(subAgent);
+    const saved = threads[nextKey];
+
+    setThreads((prev) => ({ ...prev, [currentKey]: { conversationId, messages } }));
     setSelected(subAgent);
-    setMessages([]);
-    setConversationId(undefined);
+    setMessages(saved?.messages ?? []);
+    setConversationId(saved?.conversationId);
     setError(null);
   }
 
