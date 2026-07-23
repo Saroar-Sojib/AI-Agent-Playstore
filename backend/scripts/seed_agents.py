@@ -1,15 +1,3 @@
-"""Content pipeline: turn the raw agents CSV into working Agent/SubAgent rows.
-
-Usage:
-    python -m scripts.seed_agents [path/to/agents_sample.csv]
-
-Defaults to ``data/agents_sample.csv`` (checked into this repo). For each
-CSV row this derives, WITHOUT any hand-written prompt, a usable
-``system_prompt`` for the main profession agent and for each of its 4
-sub-agents, purely from the row's own columns (Industry, Profession, Task
-1-4, Agent 1-4, Agent 1-4 Task). Re-running is safe: rows are matched by
-``source_row_no`` and updated in place rather than duplicated.
-"""
 from __future__ import annotations
 
 import asyncio

@@ -70,9 +70,23 @@ approval needed.
 
 ## AI-assisted development disclosure
 
-This project was built with **Claude Code** (Anthropic's CLI agent) as the
-primary coding tool — see [backend/README.md](backend/README.md#ai-assisted-development-disclosure)
-for the full disclosure of what it was used for.
+**Claude Code** (Anthropic's CLI agent) was used as a coding assistant on
+both sides of this project, not as a from-scratch generator:
+
+- **Backend** — started from the author's own existing multi-tenant SaaS
+  boilerplate (auth, DB setup, project layout) from a prior project. Claude
+  Code was used to adapt that boilerplate to this assignment: converting the
+  existing tenant model into the agent/sub-agent scoping this assignment
+  needed, building the chat/LLM-integration module and the CSV→agent content
+  pipeline, writing tests/CI, and debugging real issues found while running
+  the live API — not just reviewing code statically. Full detail:
+  [backend/README.md](backend/README.md#ai-assisted-development-disclosure).
+- **Frontend** — built with Claude Code's help for the Next.js app (pages,
+  components, the auth/chat flow, deployment fixes).
+
+Every change was reviewed, tested, and committed incrementally by the
+author — this was assisted development on an existing foundation, not
+unreviewed AI output.
 
 ## Repo structure
 
